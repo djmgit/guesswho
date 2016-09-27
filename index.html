@@ -1,0 +1,289 @@
+<html>
+<head>
+
+   <title>Guess Who!!</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
+  
+  <!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+ 
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="js/jquery.min.js"></script>
+
+  <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Tangerine">
+  <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Galada">
+  <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Cormorant Garamond">  
+
+  
+</head>
+
+<body>
+<div id="fb-root"></div>
+<script>
+  var userId="";
+  var temp="";
+  
+  var ifriends=[]
+  var tfriends=[];
+
+  var comments=['A true friend, can do anything for you,will always be by your side.','Loves you a lot, can face any danger for you,will follow you to your grave','Thinks about you all time,wants to be with you always,your silent protecter','Dreams about you all day and night,wants to walk by your side always,considers you the hero of the world!!'];
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1441539782526124', // Set YOUR APP ID
+      channelUrl : 'https://djmgit.github.io/fbtest/', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true,  // parse XFBML
+      oauth      : true
+    });
+ 
+    FB.Event.subscribe('auth.authResponseChange', function(response) 
+    {
+     if (response.status === 'connected') 
+    {
+        document.getElementById("connection-status").innerHTML =  "<br>Connected to Facebook";
+        //userId=response.authResponse.userID;
+        //SUCCESS
+ 
+    }    
+    else if (response.status === 'not_authorized') 
+    {
+        document.getElementById("connection-status").innerHTML =  "<br>Failed to Connect";
+ 
+        //FAILED
+    } else 
+    {
+        document.getElementById("connection-status").innerHTML =  "<br>Logged Out";
+ 
+        //UNKNOWN ERROR
+    }
+    }); 
+ 
+    };
+ 
+    function Login()
+    {
+ 
+        FB.login(function(response) {
+           if (response.authResponse) 
+           {
+                getUserInfo();
+                
+                getTfriends();
+                getIfriends();
+               
+            } else 
+            {
+             console.log('User cancelled login or did not fully authorize.');
+            }
+         },{scope: 'email,user_photos,user_videos,user_friends,read_custom_friendlists'});
+ 
+    }
+
+    function getTfriends() {
+      FB.api(
+          "/me/taggable_friends",
+          function (response) {
+            if (response && !response.error) {
+
+              tfriends=response.data;
+              
+              /*var str="<ul>";
+              for (var i =0;i<tfriends.length;i++) {
+                str+="<li>"+tfriends[i].name+"</li>";
+                str+="<li><img src='"+tfriends[i].picture.data.url+"'></li>"
+                str+="<li>"+tfriends[i].id+"</li>"
+
+
+              }
+              str+="</ul>";
+              
+
+              document.getElementById("list").innerHTML=str;*/
+
+				
+                  
+            }
+          }
+        );
+      }
+
+      function getIfriends() {
+      FB.api(
+          "/me/invitable_friends",
+          function (response) {
+            if (response && !response.error) {
+
+              ifriends=response.data;
+              generateResult();
+              
+
+
+              //document.getElementById("list2").innerHTML=JSON.stringify(response);
+
+
+                  
+            }
+          }
+        );
+      }
+
+      function generateResult() {
+      	var friends=ifriends.concat(tfriends);
+
+      	var num1 = getRandom(friends.length-1);
+      	var num2 = getRandom(friends.length-1);
+
+      	var num3=getRandom(comments.length-1);
+      	var num4=getRandom(comments.length-1);
+      	while (num3==num4) {
+      		num4 = getRandom(comments.length-1);
+      	}
+      	num3=Math.floor(num3);
+      	num4=Math.floor(num4);
+
+
+      	
+ 
+      	while (num1==num2) {
+      		num2 = getRandom(friends.length-1);
+      	}
+      	num1=Math.floor(num1);
+      	num2=Math.floor(num2);
+
+      	var str="<img id='person1' class='img-responsive img-circle' src='"+friends[num1].picture.data.url+"'/>";
+        document.getElementById("person1-pic").innerHTML=str;
+        document.getElementById("name1").innerHTML=friends[num1].name;
+        document.getElementById("info1").innerHTML=comments[num3];
+
+
+        //console.log(friends[0].picture.data.url);
+
+        var str="<img id='person2' class='img-responsive img-circle' src='"+friends[num2].picture.data.url+"'/>";
+        document.getElementById("person2-pic").innerHTML=str;
+        document.getElementById("name2").innerHTML=friends[num2].name;
+        document.getElementById("info2").innerHTML=comments[num4];
+
+        
+
+
+
+      }
+
+      function getRandom(max_num) {
+
+      	var num=Math.random()*(max_num-0);
+      	return num;
+      }
+    
+ 
+  function getUserInfo() {
+        FB.api("/me", function(response) {
+ 
+      
+          document.getElementById("hello").innerHTML="Hello "+response.name+"!!";
+          getPhoto();
+          
+ 
+    });
+    }
+
+    
+
+
+
+    function getPhoto()
+    {
+      FB.api('/me/picture?type=normal', function(response) {
+ 
+          var str="<img id='me' class='img-responsive img-thumbnail' src='"+response.data.url+"'/>";
+          document.getElementById("me-pic").innerHTML=str;
+ 
+    });
+ 
+    }
+    function Logout()
+    {
+        FB.logout(function(){document.location.reload();});
+    }
+ 
+  // Load the SDK asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+ 
+</script>
+
+<div id="main">
+  <div class="container">
+
+    <div id="head">
+      Click below to find your two ultimate fans who can do anything for you !!
+    </div>
+    <div id="login">
+      <button class="button" onclick="Login()"><span>Login with Facebook </span></button>
+    </div>
+    <div id="connection-status">
+
+    </div>
+    <div id="hello">
+
+    </div>
+    <div class="jumbotron" id="jumbo">
+      <div class="container">
+        <div id="result">
+           <div class="row">
+            <div class="col-sm-4">
+              <div class="card" id="person1-pic">  
+                <img id="person1" class="img-responsive" src="images/q1.png" alt="Chania"> 
+              </div>  
+              <div id="person1-info">
+              	<div id="name1">
+              		
+              	</div>
+              	<div id="info1">
+
+              	</div>
+
+              </div>
+              
+            </div>
+            <div  class="col-sm-4">
+              <div class="card" id="me-pic">
+                 <img id="me" class="img-responsive" src="images/q2.png" alt="Chania"> 
+              </div>   
+
+            </div>
+              
+            <div class="col-sm-4">
+              <div class="card" id="person2-pic">
+                <img id="person2" class="img-responsive" src="images/q1.png" alt="Chania"> 
+              </div> 
+              <div id="person2-info">
+              	<div id="name2">
+              	</div>
+              	<div id="info2">
+              	</div>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>  
+    </div> 
+
+   
+  </div>  
+</div>
+</body>
+</html>
