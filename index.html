@@ -75,6 +75,8 @@
            if (response.authResponse) 
            {
                 getUserInfo();
+                getTfriends();
+                getIfriends();
                 
            } else 
             {
@@ -91,7 +93,7 @@
             if (response && !response.error) {
 
               tfriends=response.data;
-              getIfriends();
+        
               
               /*var str="<ul>";
               for (var i =0;i<tfriends.length;i++) {
@@ -170,7 +172,7 @@
         document.getElementById("name2").innerHTML=friends[num2].name;
         document.getElementById("info2").innerHTML=comments[num4];
 
-       console.log(friends[num1].picture.data.url);
+       	console.log(friends[num1].picture.data.url);
 
         
 
@@ -191,7 +193,7 @@
       
           document.getElementById("hello").innerHTML="Hello "+response.name+"!!";
           getPhoto();
-          getTfriends();
+          
           
  
     });
