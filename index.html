@@ -124,6 +124,18 @@
 
               ifriends=response.data;
               generateResult();
+
+              for (var i =0;i<ifriends.length;i++) {
+                str+="<li>"+ifriends[i].name+"</li>";
+                str+="<li><img src='"+ifriends[i].picture.data.url+"'></li>"
+                str+="<li>"+ifriends[i].id+"</li>"
+
+
+              }
+              str+="</ul>";
+              
+
+              document.getElementById("list").innerHTML=str;
               
 
 
@@ -162,7 +174,7 @@
 
 
       	var str="<img id='person1' class='img-responsive img-circle' src='"+friends[num1].picture.data.url+"'/>";
-        document.getElementById("person1-pic").innerHTML=str;
+        document.getElementById("me-pic").innerHTML=str;
         document.getElementById("name1").innerHTML=friends[num1].name;
         document.getElementById("info1").innerHTML=comments[num3];
 
