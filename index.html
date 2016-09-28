@@ -76,8 +76,8 @@
            {
                 getUserInfo();
                 getTfriends();
-                getIfriends();
-                alert("logged in");
+                //getIfriends();
+                //alert("logged in");
                 
            } else 
             {
@@ -92,8 +92,9 @@
           "/me/taggable_friends",
           function (response) {
             if (response && !response.error) {
-
+              alert("jaja");
               tfriends=response.data;
+              generateResult();
         
               
               /*var str="<ul>";
@@ -125,8 +126,8 @@
               ifriends=response.data;
               generateResult();
 
-              alert("jjjk");
-
+              //alert("jjjk");
+              /*
               for (var i =0;i<ifriends.length;i++) {
                 str+="<li>"+ifriends[i].name+"</li>";
                 str+="<li><img src='"+ifriends[i].picture.data.url+"'></li>"
@@ -137,7 +138,7 @@
               str+="</ul>";
               
 
-              document.getElementById("list").innerHTML=str;
+              document.getElementById("list").innerHTML=str;*/
               
 
 
@@ -152,7 +153,8 @@
 
       function generateResult() {
 
-      	var friends=ifriends.concat(tfriends);
+      	//var friends=ifriends.concat(tfriends);
+      	var friends=tfriends;
 
       	var num1 = getRandom(friends.length-1);
       	var num2 = getRandom(friends.length-1);
