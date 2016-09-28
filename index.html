@@ -92,7 +92,7 @@
           "/me/taggable_friends",
           function (response) {
             if (response && !response.error) {
-              
+
               tfriends=response.data;
               generateResult();
         
@@ -178,7 +178,7 @@
 
 
       	var str="<img id='person1' class='img-responsive img-circle' src='"+friends[num1].picture.data.url+"'/>";
-        document.getElementById("me-pic").innerHTML=str;
+        document.getElementById("person1-pic").innerHTML=str;
         document.getElementById("name1").innerHTML=friends[num1].name;
         document.getElementById("info1").innerHTML=comments[num3];
 
